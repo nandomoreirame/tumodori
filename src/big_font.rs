@@ -174,11 +174,7 @@ pub fn render_time(minutes: u64, seconds: u64) -> Vec<String> {
     for row in 0..DIGIT_HEIGHT {
         let line = format!(
             "{}  {}  {}  {}  {}",
-            DIGITS[d1][row],
-            DIGITS[d2][row],
-            COLON[row],
-            DIGITS[d3][row],
-            DIGITS[d4][row],
+            DIGITS[d1][row], DIGITS[d2][row], COLON[row], DIGITS[d3][row], DIGITS[d4][row],
         );
         lines.push(line);
     }

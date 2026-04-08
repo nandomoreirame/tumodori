@@ -2,8 +2,16 @@
 name = "tumodori"
 version = "0.1.0"
 edition = "2024"
-description = "A terminal-based Pomodoro timer built with Ratatui"
+rust-version = "1.87"
+description = "A terminal-based Pomodoro timer with big digit display, built with Ratatui"
 license = "MIT"
+authors = ["Fernando Moreira <nandomoreira.me@gmail.com>"]
+repository = "https://github.com/nandomoreirame/tumodori"
+homepage = "https://github.com/nandomoreirame/tumodori"
+readme = "README.md"
+keywords = ["pomodoro", "timer", "tui", "terminal", "ratatui"]
+categories = ["command-line-utilities"]
+exclude = ["docs/", "screenshot.png"]
 
 [dependencies]
 clap = { version = "4.6.0", features = ["derive"] }

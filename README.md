@@ -1,22 +1,40 @@
 # tumodori
 
-A terminal-based Pomodoro timer built with [Ratatui](https://ratatui.rs/) and Rust.
+[![Crates.io](https://img.shields.io/crates/v/tumodori)](https://crates.io/crates/tumodori)
+[![CI](https://github.com/nandomoreirame/tumodori/actions/workflows/ci.yml/badge.svg)](https://github.com/nandomoreirame/tumodori/actions)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Rust](https://img.shields.io/badge/rust-1.87%2B-orange.svg)](https://www.rust-lang.org/)
+[![Downloads](https://img.shields.io/crates/d/tumodori)](https://crates.io/crates/tumodori)
+[![Docs](https://img.shields.io/docsrs/tumodori)](https://docs.rs/tumodori)
+
+A terminal-based Pomodoro timer with big digit display, built with [Ratatui](https://ratatui.rs/) and Rust.
+
+![tumodori screenshot](screenshot.png)
 
 ## Features
 
-- Configurable work session duration (default: 25 minutes)
-- Configurable short break duration (default: 5 minutes)
-- Configurable long break duration (default: 15 minutes)
-- Automatic long break after a configurable number of sessions (default: 4)
+- Big, centered digit display for easy reading from a distance
+- Configurable work, short break, and long break durations
+- Automatic long break after a configurable number of sessions
 - Desktop notifications with alarm sound when a phase ends
-- Big digit timer display, centered in the terminal
-- Progress bar with color-coded phases
-- Color-coded timer states (idle, running, paused, finished)
+- Color-coded phases (red for work, green for short break, blue for long break)
+- Color-coded timer states (gray idle, yellow paused, white finished)
+- Progress bar at the bottom of the terminal
 - Session counter
 
 ## Installation
 
+### From crates.io
+
 ```bash
+cargo install tumodori
+```
+
+### From source
+
+```bash
+git clone https://github.com/nandomoreirame/tumodori.git
+cd tumodori
 cargo install --path .
 ```
 
@@ -26,7 +44,7 @@ cargo install --path .
 tumodori
 ```
 
-## Keybindings
+### Keybindings
 
 | Key | Action |
 |-----|--------|
@@ -35,9 +53,7 @@ tumodori
 | `s` | Skip to next phase |
 | `q` / `Esc` | Quit |
 
-## Configuration
-
-All settings are configurable via CLI flags:
+### CLI options
 
 | Flag | Short | Default | Range | Description |
 |------|-------|---------|-------|-------------|
@@ -45,7 +61,7 @@ All settings are configurable via CLI flags:
 | `--short-break` | `-s` | 5 | 1-1440 | Short break duration in minutes |
 | `--long-break` | `-l` | 15 | 1-1440 | Long break duration in minutes |
 | `--sessions` | `-n` | 4 | 1-100 | Work sessions before a long break |
-| `--no-notify` | | false | | Disable desktop notifications |
+| `--no-notify` | | | | Disable desktop notifications |
 
 ### Examples
 
@@ -55,24 +71,25 @@ tumodori -w 50 -s 10 -l 20 -n 6  # custom durations
 tumodori --no-notify              # disable notifications
 ```
 
-### Audio notifications
+## Audio notifications
 
-When a phase ends, tumodori plays an alarm sound using PipeWire (`pw-play`) or PulseAudio (`paplay`) as fallback. A terminal bell is also emitted. To disable all notifications, use `--no-notify`.
+When a phase ends, tumodori sends a desktop notification and plays an alarm sound using PipeWire (`pw-play`) or PulseAudio (`paplay`) as fallback. A terminal bell is also emitted.
 
 On Linux, the alarm sound file is expected at:
-`/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga`
 
-Install it with `sound-theme-freedesktop` (available on most distributions).
-
-## Building from source
-
-```bash
-git clone https://github.com/nandomoreirame/tumodori.git
-cd tumodori
-cargo build --release
+```
+/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga
 ```
 
-The binary will be available at `target/release/tumodori`.
+Install it with the `sound-theme-freedesktop` package (available on most distributions). To disable all notifications, use `--no-notify`.
+
+## Inspired by
+
+- [timr-tui](https://github.com/sectore/timr-tui) - TUI app for timers, built with Ratatui and Rust
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## License
 

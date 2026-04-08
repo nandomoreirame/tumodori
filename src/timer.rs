@@ -123,7 +123,9 @@ impl Timer {
     pub fn advance_phase(&mut self) {
         let next_phase = match self.phase {
             Phase::Work => {
-                if self.completed_sessions.is_multiple_of(self.config.sessions_before_long_break)
+                if self
+                    .completed_sessions
+                    .is_multiple_of(self.config.sessions_before_long_break)
                     && self.completed_sessions > 0
                 {
                     Phase::LongBreak

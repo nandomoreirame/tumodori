@@ -61,7 +61,8 @@ mod tests {
 
     #[test]
     fn accepts_valid_range() {
-        let config = Config::parse_from(["tumodori", "-w", "50", "-s", "10", "-l", "20", "-n", "6"]);
+        let config =
+            Config::parse_from(["tumodori", "-w", "50", "-s", "10", "-l", "20", "-n", "6"]);
         assert_eq!(config.work_minutes, 50);
         assert_eq!(config.short_break_minutes, 10);
         assert_eq!(config.long_break_minutes, 20);

@@ -1,1 +1,10 @@
 /target
+/docs/specs/
+/docs/plans/
+*.swp
+*.swo
+*~
+.DS_Store
+.idea/
+.vscode/
+*.log

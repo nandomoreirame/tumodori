@@ -19,13 +19,13 @@ pub fn draw(frame: &mut Frame, timer: &Timer) {
     let center = centered_rect(content_width, content_height, area);
 
     let chunks = Layout::vertical([
-        Constraint::Length(1), // phase label
-        Constraint::Length(1), // spacing
+        Constraint::Length(1),                           // phase label
+        Constraint::Length(1),                           // spacing
         Constraint::Length(big_font::rendered_height()), // big timer
-        Constraint::Length(1), // spacing
-        Constraint::Length(1), // session + progress inline
-        Constraint::Length(1), // spacing
-        Constraint::Length(1), // controls
+        Constraint::Length(1),                           // spacing
+        Constraint::Length(1),                           // session + progress inline
+        Constraint::Length(1),                           // spacing
+        Constraint::Length(1),                           // controls
     ])
     .split(center);
 
@@ -141,8 +141,14 @@ mod tests {
     #[test]
     fn timer_color_running_follows_phase() {
         assert_eq!(timer_color(TimerState::Running, Phase::Work), Color::Red);
-        assert_eq!(timer_color(TimerState::Running, Phase::ShortBreak), Color::Green);
-        assert_eq!(timer_color(TimerState::Running, Phase::LongBreak), Color::Blue);
+        assert_eq!(
+            timer_color(TimerState::Running, Phase::ShortBreak),
+            Color::Green
+        );
+        assert_eq!(
+            timer_color(TimerState::Running, Phase::LongBreak),
+            Color::Blue
+        );
     }
 
     #[test]
