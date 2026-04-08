@@ -17,7 +17,10 @@ pub fn send(phase: Phase) {
         .summary(title)
         .body(body)
         .urgency(urgency)
+        .sound_name("alarm-clock-elapsed")
         .show();
+    // Terminal bell as fallback audio cue
+    print!("\x07");
 }
 
 #[cfg(test)]
