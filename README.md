@@ -6,6 +6,7 @@
 [![Rust](https://img.shields.io/badge/rust-1.87%2B-orange.svg)](https://www.rust-lang.org/)
 [![Downloads](https://img.shields.io/crates/d/tumodori)](https://crates.io/crates/tumodori)
 [![Docs](https://img.shields.io/docsrs/tumodori)](https://docs.rs/tumodori)
+[![Built With Ratatui](https://img.shields.io/badge/Built_With-Ratatui-000?logo=ratatui&logoColor=fff&labelColor=000&color=fff)](https://ratatui.rs/)
 
 A terminal-based Pomodoro timer with big digit display, built with [Ratatui](https://ratatui.rs/) and Rust.
 
