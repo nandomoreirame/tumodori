@@ -121,3 +121,37 @@ fn centered_rect(width: u16, height: u16, area: Rect) -> Rect {
         .flex(Flex::Center)
         .split(vertical[0])[0]
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn phase_color_maps_correctly() {
+        assert_eq!(phase_color(Phase::Work), Color::Red);
+        assert_eq!(phase_color(Phase::ShortBreak), Color::Green);
+        assert_eq!(phase_color(Phase::LongBreak), Color::Blue);
+    }
+
+    #[test]
+    fn timer_color_idle_is_dark_gray() {
+        assert_eq!(timer_color(TimerState::Idle, Phase::Work), Color::DarkGray);
+    }
+
+    #[test]
+    fn timer_color_running_follows_phase() {
+        assert_eq!(timer_color(TimerState::Running, Phase::Work), Color::Red);
+        assert_eq!(timer_color(TimerState::Running, Phase::ShortBreak), Color::Green);
+        assert_eq!(timer_color(TimerState::Running, Phase::LongBreak), Color::Blue);
+    }
+
+    #[test]
+    fn timer_color_paused_is_yellow() {
+        assert_eq!(timer_color(TimerState::Paused, Phase::Work), Color::Yellow);
+    }
+
+    #[test]
+    fn timer_color_finished_is_white() {
+        assert_eq!(timer_color(TimerState::Finished, Phase::Work), Color::White);
+    }
+}

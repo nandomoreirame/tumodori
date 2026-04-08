@@ -1,3 +1,5 @@
+#![forbid(unsafe_code)]
+
 mod app;
 mod big_font;
 mod config;

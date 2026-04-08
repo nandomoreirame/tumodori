@@ -123,7 +123,7 @@ impl Timer {
     pub fn advance_phase(&mut self) {
         let next_phase = match self.phase {
             Phase::Work => {
-                if self.completed_sessions % self.config.sessions_before_long_break == 0
+                if self.completed_sessions.is_multiple_of(self.config.sessions_before_long_break)
                     && self.completed_sessions > 0
                 {
                     Phase::LongBreak
@@ -158,10 +158,10 @@ impl Timer {
 
     fn total_elapsed(&self) -> Duration {
         let mut total = self.elapsed;
-        if self.state == TimerState::Running {
-            if let Some(last) = self.last_tick {
-                total += last.elapsed();
-            }
+        if self.state == TimerState::Running
+            && let Some(last) = self.last_tick
+        {
+            total += last.elapsed();
         }
         total
     }
@@ -201,5 +201,91 @@ mod tests {
         timer.start();
         assert!(timer.tick());
         assert!(!timer.tick());
+    }
+
+    #[test]
+    fn toggle_starts_idle_timer() {
+        let mut timer = Timer::new(quick_config());
+        timer.toggle();
+        assert_eq!(timer.state, TimerState::Running);
+    }
+
+    #[test]
+    fn toggle_pauses_running_timer() {
+        let mut timer = Timer::new(quick_config());
+        timer.start();
+        timer.toggle();
+        assert_eq!(timer.state, TimerState::Paused);
+    }
+
+    #[test]
+    fn toggle_resumes_paused_timer() {
+        let mut timer = Timer::new(quick_config());
+        timer.start();
+        timer.pause();
+        timer.toggle();
+        assert_eq!(timer.state, TimerState::Running);
+    }
+
+    #[test]
+    fn reset_returns_to_idle() {
+        let mut timer = Timer::new(quick_config());
+        timer.start();
+        timer.reset();
+        assert_eq!(timer.state, TimerState::Idle);
+    }
+
+    #[test]
+    fn advance_phase_work_to_short_break() {
+        let mut timer = Timer::new(quick_config());
+        timer.advance_phase();
+        assert_eq!(timer.phase, Phase::ShortBreak);
+        assert_eq!(timer.state, TimerState::Idle);
+    }
+
+    #[test]
+    fn advance_phase_short_break_to_work() {
+        let mut timer = Timer::new(quick_config());
+        timer.phase = Phase::ShortBreak;
+        timer.advance_phase();
+        assert_eq!(timer.phase, Phase::Work);
+    }
+
+    #[test]
+    fn long_break_after_n_sessions() {
+        let mut timer = Timer::new(quick_config());
+        timer.completed_sessions = 4;
+        timer.advance_phase();
+        assert_eq!(timer.phase, Phase::LongBreak);
+    }
+
+    #[test]
+    fn work_session_increments_completed() {
+        let mut timer = Timer::new(quick_config());
+        timer.start();
+        timer.tick(); // finishes immediately (0 duration)
+        assert_eq!(timer.completed_sessions, 1);
+    }
+
+    #[test]
+    fn break_session_does_not_increment_completed() {
+        let mut timer = Timer::new(quick_config());
+        timer.phase = Phase::ShortBreak;
+        timer.start();
+        timer.tick();
+        assert_eq!(timer.completed_sessions, 0);
+    }
+
+    #[test]
+    fn progress_is_one_when_duration_is_zero() {
+        let timer = Timer::new(quick_config());
+        assert_eq!(timer.progress(), 1.0);
+    }
+
+    #[test]
+    fn phase_labels() {
+        assert_eq!(Phase::Work.label(), "Work");
+        assert_eq!(Phase::ShortBreak.label(), "Short Break");
+        assert_eq!(Phase::LongBreak.label(), "Long Break");
     }
 }
