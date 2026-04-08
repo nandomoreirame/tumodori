@@ -1,6 +1,12 @@
+use std::io::Write;
+use std::process::Command;
+use std::thread;
+
 use notify_rust::{Notification, Urgency};
 
 use crate::timer::Phase;
+
+const ALARM_SOUND: &str = "/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga";
 
 pub fn notification_content(phase: Phase) -> (&'static str, &'static str, Urgency) {
     let title = "tumodori";
@@ -17,10 +23,27 @@ pub fn send(phase: Phase) {
         .summary(title)
         .body(body)
         .urgency(urgency)
-        .sound_name("alarm-clock-elapsed")
         .show();
-    // Terminal bell as fallback audio cue
-    print!("\x07");
+
+    // Terminal bell
+    let _ = std::io::stdout().write_all(b"\x07");
+    let _ = std::io::stdout().flush();
+
+    // Play alarm sound in background via PipeWire/PulseAudio
+    thread::spawn(|| {
+        let _ = Command::new("pw-play")
+            .arg(ALARM_SOUND)
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::null())
+            .status()
+            .or_else(|_| {
+                Command::new("paplay")
+                    .arg(ALARM_SOUND)
+                    .stdout(std::process::Stdio::null())
+                    .stderr(std::process::Stdio::null())
+                    .status()
+            });
+    });
 }
 
 #[cfg(test)]
