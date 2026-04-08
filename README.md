@@ -2,7 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/tumodori)](https://crates.io/crates/tumodori)
 [![CI](https://github.com/nandomoreirame/tumodori/actions/workflows/ci.yml/badge.svg)](https://github.com/nandomoreirame/tumodori/actions)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/nandomoreirame/tumodori/blob/main/LICENSE)
 [![Rust](https://img.shields.io/badge/rust-1.87%2B-orange.svg)](https://www.rust-lang.org/)
 [![Downloads](https://img.shields.io/crates/d/tumodori)](https://crates.io/crates/tumodori)
 [![Docs](https://img.shields.io/docsrs/tumodori)](https://docs.rs/tumodori)
@@ -89,8 +89,8 @@ Install it with the `sound-theme-freedesktop` package (available on most distrib
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+See [CONTRIBUTING.md](https://github.com/nandomoreirame/tumodori/blob/main/CONTRIBUTING.md) for guidelines.
 
 ## License
 
-[MIT](LICENSE)
+[MIT](https://github.com/nandomoreirame/tumodori/blob/main/LICENSE)

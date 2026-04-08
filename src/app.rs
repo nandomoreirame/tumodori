@@ -1,3 +1,5 @@
+//! Application state and main event loop.
+
 use std::time::Duration;
 
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
@@ -7,15 +9,20 @@ use crate::notification;
 use crate::timer::Timer;
 use crate::ui;
 
+/// Interval between timer ticks and event polls.
 const TICK_RATE: Duration = Duration::from_millis(100);
 
+/// Main application that manages the timer, UI rendering, and user input.
 pub struct App {
+    /// The Pomodoro timer.
     pub timer: Timer,
+    /// Whether the user has requested to quit.
     pub should_quit: bool,
     notify_enabled: bool,
 }
 
 impl App {
+    /// Creates a new application from the given configuration.
     pub fn new(config: Config) -> Self {
         let notify_enabled = !config.no_notify;
         Self {
@@ -25,6 +32,7 @@ impl App {
         }
     }
 
+    /// Runs the main event loop, rendering the UI and handling input until the user quits.
     pub fn run(&mut self, terminal: &mut ratatui::DefaultTerminal) -> std::io::Result<()> {
         loop {
             terminal.draw(|frame| ui::draw(frame, &self.timer))?;

@@ -1,3 +1,5 @@
+//! Terminal UI rendering with big digit timer display.
+
 use ratatui::{
     Frame,
     layout::{Alignment, Constraint, Flex, Layout, Rect},
@@ -9,6 +11,7 @@ use ratatui::{
 use crate::big_font;
 use crate::timer::{Phase, Timer, TimerState};
 
+/// Renders the full timer UI into the given frame.
 pub fn draw(frame: &mut Frame, timer: &Timer) {
     let area = frame.area();
 

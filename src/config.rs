@@ -1,6 +1,8 @@
+//! CLI configuration and argument parsing.
+
 use clap::Parser;
 
-/// A terminal-based Pomodoro timer built with Ratatui.
+/// Application configuration parsed from command-line arguments.
 #[derive(Debug, Clone, Parser)]
 #[command(name = "tumodori", version, about)]
 pub struct Config {

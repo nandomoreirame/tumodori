@@ -1,15 +1,22 @@
+//! Pomodoro timer logic with phase management and state transitions.
+
 use std::time::{Duration, Instant};
 
 use crate::config::Config;
 
+/// The current phase of the Pomodoro cycle.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Phase {
+    /// Active work session.
     Work,
+    /// Short break between work sessions.
     ShortBreak,
+    /// Long break after completing a set of work sessions.
     LongBreak,
 }
 
 impl Phase {
+    /// Returns a human-readable label for the phase.
     pub fn label(self) -> &'static str {
         match self {
             Phase::Work => "Work",
@@ -19,17 +26,26 @@ impl Phase {
     }
 }
 
+/// The current state of the timer.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum TimerState {
+    /// Timer has not been started yet.
     Idle,
+    /// Timer is actively counting down.
     Running,
+    /// Timer is temporarily paused.
     Paused,
+    /// Timer has reached zero.
     Finished,
 }
 
+/// Core Pomodoro timer that tracks elapsed time and phase transitions.
 pub struct Timer {
+    /// The current Pomodoro phase.
     pub phase: Phase,
+    /// The current timer state.
     pub state: TimerState,
+    /// Number of completed work sessions.
     pub completed_sessions: u32,
     config: Config,
     duration: Duration,
@@ -38,6 +54,7 @@ pub struct Timer {
 }
 
 impl Timer {
+    /// Creates a new timer from the given configuration.
     pub fn new(config: Config) -> Self {
         let duration = Duration::from_secs(config.work_minutes * 60);
         Self {
@@ -51,11 +68,13 @@ impl Timer {
         }
     }
 
+    /// Starts the timer from idle state.
     pub fn start(&mut self) {
         self.state = TimerState::Running;
         self.last_tick = Some(Instant::now());
     }
 
+    /// Pauses the timer if it is currently running.
     pub fn pause(&mut self) {
         if self.state == TimerState::Running {
             self.accumulate_elapsed();
@@ -64,6 +83,7 @@ impl Timer {
         }
     }
 
+    /// Resumes the timer from a paused state.
     pub fn resume(&mut self) {
         if self.state == TimerState::Paused {
             self.state = TimerState::Running;
@@ -71,6 +91,7 @@ impl Timer {
         }
     }
 
+    /// Toggles the timer state: idle -> running, running -> paused, paused -> running, finished -> next phase.
     pub fn toggle(&mut self) {
         match self.state {
             TimerState::Idle => self.start(),
@@ -80,6 +101,7 @@ impl Timer {
         }
     }
 
+    /// Resets the timer to idle with zero elapsed time.
     pub fn reset(&mut self) {
         self.elapsed = Duration::ZERO;
         self.last_tick = None;
@@ -106,11 +128,13 @@ impl Timer {
         false
     }
 
+    /// Returns the remaining time in the current phase.
     pub fn remaining(&self) -> Duration {
         let total_elapsed = self.total_elapsed();
         self.duration.saturating_sub(total_elapsed)
     }
 
+    /// Returns the progress as a ratio from 0.0 (just started) to 1.0 (finished).
     pub fn progress(&self) -> f64 {
         let total_elapsed = self.total_elapsed().as_secs_f64();
         let total = self.duration.as_secs_f64();
@@ -120,6 +144,7 @@ impl Timer {
         (total_elapsed / total).min(1.0)
     }
 
+    /// Advances to the next phase in the Pomodoro cycle.
     pub fn advance_phase(&mut self) {
         let next_phase = match self.phase {
             Phase::Work => {

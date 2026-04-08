@@ -1,4 +1,5 @@
 #![forbid(unsafe_code)]
+#![doc = include_str!("../README.md")]
 
 mod app;
 mod big_font;

@@ -1,3 +1,8 @@
+//! Desktop notification and alarm sound support.
+//!
+//! Sends native desktop notifications when a Pomodoro phase ends.
+//! On Linux, also plays an alarm sound via PipeWire or PulseAudio.
+
 use std::io::Write;
 use std::process::Command;
 use std::thread;
@@ -11,6 +16,7 @@ use crate::timer::Phase;
 #[cfg(target_os = "linux")]
 const ALARM_SOUND: &str = "/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga";
 
+/// Returns the notification title and body for the given phase.
 pub fn notification_content(phase: Phase) -> (&'static str, &'static str) {
     let title = "tumodori";
     match phase {
@@ -28,6 +34,7 @@ fn urgency_for(phase: Phase) -> Urgency {
     }
 }
 
+/// Sends a desktop notification and plays an alarm sound for the completed phase.
 pub fn send(phase: Phase) {
     let (title, body) = notification_content(phase);
 
